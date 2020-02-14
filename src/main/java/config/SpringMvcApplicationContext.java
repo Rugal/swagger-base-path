@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.ContentNegotiationConfi
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.AbstractHandlerMapping;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -28,6 +29,24 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 @EnableWebMvc
 public class SpringMvcApplicationContext implements WebMvcConfigurer {
 
+  private static final String SWAGGER_BASE_PATH = "/blueprints";
+
+  @Override
+  public void addViewControllers(ViewControllerRegistry registry) {
+    registry.addRedirectViewController(SWAGGER_BASE_PATH + "/v2/api-docs",
+                                       "/v2/api-docs");
+    registry.addRedirectViewController(SWAGGER_BASE_PATH + "/configuration/ui",
+                                       "/configuration/ui");
+    registry.addRedirectViewController(SWAGGER_BASE_PATH + "/configuration/security",
+                                       "/configuration/security");
+    registry.addRedirectViewController(SWAGGER_BASE_PATH + "/swagger-resources",
+                                       "/swagger-resources");
+    registry.addRedirectViewController(SWAGGER_BASE_PATH,
+                                       SWAGGER_BASE_PATH + "/swagger-ui.html");
+    registry.addRedirectViewController(SWAGGER_BASE_PATH + "/",
+                                       SWAGGER_BASE_PATH + "/swagger-ui.html");
+  }
+
   @Bean
   public ObjectMapper objectMapper() {
     return new ObjectMapper();
@@ -40,7 +59,7 @@ public class SpringMvcApplicationContext implements WebMvcConfigurer {
 
   @Override
   public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-    registry.addResourceHandler("/**")
+    registry.addResourceHandler("/**", SWAGGER_BASE_PATH + "/**")
             .addResourceLocations("classpath:/static/",
                                   "classpath:/META-INF/resources/",
                                   "classpath:/resources/ ",
