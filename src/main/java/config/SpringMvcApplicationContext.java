@@ -31,16 +31,17 @@ public class SpringMvcApplicationContext implements WebMvcConfigurer {
 
   private static final String SWAGGER_BASE_PATH = "/blueprints";
 
+  private SpringMvcApplicationContext add(ViewControllerRegistry r, String path) {
+    r.addRedirectViewController(SWAGGER_BASE_PATH + path, path);
+    return this;
+  }
+
   @Override
   public void addViewControllers(ViewControllerRegistry registry) {
-    registry.addRedirectViewController(SWAGGER_BASE_PATH + "/v2/api-docs",
-                                       "/v2/api-docs");
-    registry.addRedirectViewController(SWAGGER_BASE_PATH + "/configuration/ui",
-                                       "/configuration/ui");
-    registry.addRedirectViewController(SWAGGER_BASE_PATH + "/configuration/security",
-                                       "/configuration/security");
-    registry.addRedirectViewController(SWAGGER_BASE_PATH + "/swagger-resources",
-                                       "/swagger-resources");
+    this.add(registry, "/v2/api-docs")
+            .add(registry, "/swagger-resources/configuration/security")
+            .add(registry, "/swagger-resources/configuration/ui")
+            .add(registry, "/swagger-resources");
     registry.addRedirectViewController(SWAGGER_BASE_PATH,
                                        SWAGGER_BASE_PATH + "/swagger-ui.html");
     registry.addRedirectViewController(SWAGGER_BASE_PATH + "/",
