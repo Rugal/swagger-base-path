@@ -7,3 +7,11 @@ jdbc:
   url: jdbc:postgresql://localhost:5432/postgres
   username: postgres
   password: 123
+
+# use this to customize api-docs path
+#springfox:
+#  documentation:
+#    swagger:
+#      v2:
+#        path: /blueprints/api-docs
+#
